@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>New Post</h1>
+<div mat-dialog-content>
+  <div *ngIf="data.userId == undefined">
+    <p class="warning">Oops! There was a problem connecting to the server.<br />
+      Please check your internet connection and try again.</p>
+    <div mat-dialog-actions class="dialog-buttons-container">
+      <button mat-button class="cancel" (click)="onNoClick()">Close</button>
+    </div>
+  </div>
+  <div *ngIf="data.userId != undefined">
+    <mat-form-field>
+      <textarea matInput [(ngModel)]="message" placeholder="Message"></textarea>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="dialog-buttons-container">
+    <span>
+      <button mat-button class="cancel" (click)="onNoClick()">Cancel</button>
+    </span>
+    <span>
+    <button mat-raised-button color="primary" (click)="addNotice()">Submit</button>
+  </span>
+  </div>
+</div>

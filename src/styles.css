@@ -1,0 +1,56 @@
+/*!* General Page Styles - for all pages *!*/
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+/*!* Colour Scheme *!*/
+/*!*.black {background-color: #333;}*!*/
+/*!*.dark-grey {background-color: #605856;}*!*/
+/*!*.light-grey {background-color: #D0CCD0;}*!*/
+/*!*.dark-accent {background-color: #054A91;}*!*/
+/*!*.light-accent {background-color: #1E91D6;}*!*/
+
+/*!* Variables *!*/
+body {
+  --black: #333333;
+  --dark-grey: #605856;
+  --light-grey: #D0CCD0;
+  --dark-accent: #054A91;
+  --light-accent: #1E91D6;
+  --white: #FFFFFF;
+  --submit: #00C853;
+  --cancel: #FF1744;
+}
+
+/* Font */
+body {font-family: 'Lato', sans-serif!important; color: var(--black); text-align: center;}
+p.warning {color: var(--cancel);}
+p.success {color: var(--submit);}
+
+body button {outline: none!important;}
+
+.mat-card, .mat-tab-label, .mat-toolbar,
+.mat-form-field, .mat-expansion-panel,
+.mat-expansion-panel-header, .mat-expansion-panel-content,
+.mat-raised-button {font-family: 'Lato', sans-serif;}
+
+.mat-raised-button {letter-spacing: 0.5px;}
+
+/* Widths */
+/* For desktop & tablet devices - larger screen size */
+.full-width {width: 100%; float: left; position: relative; margin: 16px 0 0 0;}
+.mat-card.full-width {box-shadow: none;}
+.half-width {width: 48%; margin: 16px 1%; float: left; position: relative;}
+.mat-card.half-width {box-shadow: none;}
+/* For mobile devices - smaller screen size */
+@media screen and (max-width: 400px) {
+  .half-width {width: 100%; margin: 16px 0 0 0;}
+}
+
+/* Dialog Boxes */
+.dialog-buttons-container {width: 80%; margin: auto!important;}
+.dialog-buttons-container>span {width: 50%; float: left; position: relative;}
+.dialog-buttons-container>span>button {font-weight: normal;}
+.dialog-buttons-container>button.cancel {margin: auto;}
+
+/* Progress Spinner */
+.mat-progress-spinner {margin: auto;}
+

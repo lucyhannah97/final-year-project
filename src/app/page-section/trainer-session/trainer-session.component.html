@@ -1,0 +1,63 @@
+<ng-container *ngIf="trainerSession; else second">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      {{trainerSession.className}}
+    </mat-expansion-panel-header>
+    <p *ngIf="userType == 'admin'">
+      <span class="icon">
+        <i class="fas fa-male"></i>
+      </span>
+      {{trainerSession.trainerName}}
+    </p>
+    <p>
+      <span class="icon">
+        <i class="far fa-calendar-alt"></i>
+      </span>
+      {{trainerSession.dateTime}}
+    </p>
+    <p>
+      <span class="icon">
+        <i class="fas fa-map-marker-alt"></i>
+      </span>
+      {{trainerSession.roomName}}
+    </p>
+    <p>
+      <span class="icon">
+        <i class="fas fa-asterisk"></i>
+      </span> Max. Capacity:
+      {{trainerSession.maxCapacity}}
+    </p>
+    <p [class.success]="trainerSession.maxCapacity == trainerSession.numAttending.length">
+      <span class="icon">
+        <i class="fas fa-clipboard-check"></i>
+      </span> Attending:
+      {{trainerSession.numAttending.length}}
+    </p>
+    <p [class.warning]="trainerSession.maxCapacity == trainerSession.numAttending.length">
+      <span class="icon">
+        <i class="fas fa-clipboard-list"></i>
+      </span> Waiting:
+      {{trainerSession.numWaiting.length}}
+    </p>
+
+    <button mat-raised-button color="primary" (click)="sendData(trainerSession.id)"><i class="fas fa-trash-alt"></i> Delete</button>
+
+    <!-- TODO: Add to calendar functionality-->
+    <!--<button mat-button class="addeventatc">Add to Calendar-->
+    <!--<span class="start">03/11/2019 08:00 AM</span>-->
+    <!--<span class="end">03/11/2019 10:00 AM</span>-->
+    <!--<span class="timezone">America/Los_Angeles</span>-->
+    <!--<span class="title">Summary of the event</span>-->
+    <!--<span class="description">Description of the event</span>-->
+    <!--<span class="location">Location of the event</span>-->
+    <!--</button>-->
+    <!--<div title="Add to Calendar" class="addeventatc">-->
+    <!--Add to Calendar-->
+
+    <!--</div>-->
+  </mat-expansion-panel>
+</ng-container>
+<ng-template #second>
+  <p class="warning">You currently don't have any sessions.</p>
+</ng-template>
+

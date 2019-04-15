@@ -1,0 +1,36 @@
+<mat-card-content>
+  <div *ngIf="!gotClasses">
+    <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+  </div>
+  <div *ngIf="gotClasses">
+    <form id="filter-form">
+      <mat-form-field class="spacing">
+        <mat-select placeholder="Focus" id="focusFilter" [(value)]="focusSelected">
+          <mat-option *ngFor="let aFocus of uniqueFocusList" [value]="aFocus.valueOf()">
+            {{aFocus}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="spacing">
+        <mat-select placeholder="Difficulty" id="difficultyFilter" [(value)]="difficultySelected">
+          <mat-option *ngFor="let aDifficulty of uniqueDifficultyList" [value]="aDifficulty.valueOf()">
+            {{aDifficulty}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" class="spacing" (click)="filterResults()">Filter</button>
+    </form>
+    <div *ngIf="filteredClasses.length != 0">
+      <mat-accordion>
+        <div *ngFor="let aClass of filteredClasses">
+          <class (openBookingModal)="sendData(aClass.classId)" [class]="aClass" [userType]="userType" [userId]="userId" (editDescription)="getClassInfo()" (deleteClass)="deleteClassRequest($event)"></class>
+        </div>
+      </mat-accordion>
+    </div>
+    <div *ngIf="filteredClasses.length == 0">
+      <div class="full-width">
+        <p class="warning">There are no classes matching the criteria selected.</p>
+      </div>
+    </div>
+  </div>
+</mat-card-content>

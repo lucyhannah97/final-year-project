@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>Book a class</h1>
+<div mat-dialog-content>
+  <div *ngIf="data.uniqueClasses == undefined">
+    <p class="warning">Oops! There was a problem connecting to the server.<br />
+      Please check your internet connection and try again.</p>
+    <div mat-dialog-actions class="dialog-buttons-container">
+      <button mat-button class="cancel" (click)="onNoClick()">Close</button>
+    </div>
+  </div>
+  <div *ngIf="data.uniqueClasses.length == 0">
+    <p class="warning">Sorry! There are no available sessions that you are not already booked onto.</p>
+    <div mat-dialog-actions class="dialog-buttons-container">
+      <button mat-button class="cancel" (click)="onNoClick()">Close</button>
+    </div>
+  </div>
+    <div *ngIf="data.uniqueClasses != undefined && data.uniqueClasses.length > 0">
+      <form>
+        <mat-form-field>
+          <mat-select placeholder="Class" (selectionChange)="filterSessions(this.classSelected.valueOf())" [(value)]="classSelected">
+            <mat-option *ngFor="let aClass of this.data.uniqueClasses" [value]="aClass">
+              {{aClass}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Session" id="sessionSelector" (selectionChange)="calculateSpaces(this.sessionSelected.maxCapacity.valueOf(), this.sessionSelected.numAttending.valueOf())" [(value)]="sessionSelected">
+            <mat-option *ngFor="let aSession of filteredSessions" [value]="aSession.valueOf()">
+              {{aSession.dateTime}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+      <div *ngIf="sessionSelected != undefined && sessionSelected.length != 0">
+        <p>Spaces Remaining: {{numSpaces}}</p>
+      </div>
+      <div mat-dialog-actions class="dialog-buttons-container">
+        <span>
+          <button mat-button class="cancel" (click)="onNoClick()">Cancel</button>
+        </span>
+        <span *ngIf="numSpaces > 0">
+          <button mat-raised-button color="primary" (click)="bookClass(sessionSelected.bookingId)">Book</button>
+        </span>
+        <span *ngIf="numSpaces == 0">
+          <button mat-raised-button color="primary" (click)="bookClassWaitingList(sessionSelected.bookingId)">Join Waiting List</button>
+        </span>
+      </div>
+    </div>
+</div>
+
+

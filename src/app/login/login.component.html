@@ -1,0 +1,53 @@
+<div *ngIf="loading" id="loading-spinner">
+  <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+</div>
+<mat-tab-group>
+  <mat-tab label="Customer Log In">
+    <h2>Customer</h2>
+    <form class="form-container">
+      <mat-form-field>
+        <!--TODO: add in email address verification for required-->
+        <input matInput #email placeholder="Email">
+      </mat-form-field>
+      <mat-form-field>
+        <!--TODO: add in password verification for required-->
+        <input matInput #password placeholder="Password" type="password">
+      </mat-form-field>
+      <span class="button-container">
+        <button mat-raised-button color="primary" (click)="login('user', email.value, password.value)">Log In</button>
+      </span>
+    </form>
+  </mat-tab>
+  <mat-tab label="Staff Log In">
+    <h2>Staff</h2>
+    <form class="form-container">
+      <mat-form-field>
+        <!--TODO: add in email address verification for required-->
+        <input matInput #staffEmail placeholder="Email">
+      </mat-form-field>
+      <mat-form-field>
+        <!--TODO: add in password verification for required-->
+        <input matInput #staffPassword placeholder="Password" type="password">
+      </mat-form-field>
+      <span class="button-container">
+        <button mat-raised-button color="primary" (click)="login('trainer', staffEmail.value, staffPassword.value)">Log In</button>
+      </span>
+    </form>
+  </mat-tab>
+  <mat-tab label="Admin Log In">
+    <h2>Administrator</h2>
+    <form class="form-container">
+      <mat-form-field>
+        <!--TODO: add in email address verification for required-->
+        <input matInput #adminEmail placeholder="Email">
+      </mat-form-field>
+      <mat-form-field>
+        <!--TODO: add in password verification for required-->
+        <input matInput #adminPassword placeholder="Password" type="password">
+      </mat-form-field>
+      <span class="button-container">
+        <button mat-raised-button color="primary" (click)="login('admin', adminEmail.value, adminPassword.value)">Log In</button>
+      </span>
+    </form>
+  </mat-tab>
+</mat-tab-group>

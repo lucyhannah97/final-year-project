@@ -1,0 +1,9 @@
+.mat-card.full-width.notice {box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),
+0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);}
+.mat-card.full-width.notice.notApproved {color: var(--cancel);}
+p.sub-copy {font-size: 12px;}
+
+span {width: 100%; float: left; position: relative; font-weight: normal;}
+span.button-container {width: 50%; float: left; position: relative;}
+span.button-container>button.approve {color: var(--submit);}
+span.button-container>button.cancel {color: var(--black);}

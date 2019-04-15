@@ -1,0 +1,397 @@
+<mat-tab-group>
+  <div *ngIf="userType == 'user'">
+    <mat-tab label="Bookings">
+      <mat-card class="half-width">
+        <mat-card-title>Your Bookings</mat-card-title>
+        <div *ngIf="!hasBookings">
+            <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="hasBookings">
+            <page-section [userSessions]="userBookings" [userWaiting]="userWaiting" [hasSessions]="hasBookings" (reloadBookings)="getUserBookings()" (reloadWaitings)="getUserWaiting()" (reloadSessions)="getAllSessions()" [userType]="userType" [userId]="userId"></page-section>
+        </div>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Book a class</mat-card-title>
+        <mat-card-content>
+        <button mat-raised-button color="primary" (click)="openBookingModal(0)"><i class="fas fa-plus"></i> New</button>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Have you tried...?</mat-card-title>
+        <div *ngIf="!gotRecommended">
+            <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="gotRecommended">
+          <div *ngIf="recommendedClasses == undefined">
+            <p class="warning">There was a problem connecting to the server - please check your internet connection and try again.</p>
+          </div>
+          <div *ngIf="recommendedClasses != undefined">
+            <div *ngIf="recommendedClasses.length == 0">
+              <p class="warning">There are no recommended classes for you at the moment.</p>
+            </div>
+            <div *ngIf="recommendedClasses.length > 0">
+              <div *ngFor="let aClass of recommendedClasses">
+                <class (openBookingModal)="openBookingModal(aClass.classId)" [class]="aClass" [userType]="userType" (deleteClass)="deleteClass(aClass.id)"></class>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="All Our Classes">
+      <mat-card class="full-width">
+        <mat-card-title>Class Descriptions</mat-card-title>
+        <class-overview-section (openBookingModal)="openBookingModal($event)"></class-overview-section>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Notice Board">
+      <mat-card class="full-width">
+        <mat-card-title>Notices</mat-card-title>
+        <div *ngIf="!gotNotices">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="gotNotices">
+          <div *ngFor="let aNotice of notices">
+            <notice-entry [noticeEntry]="aNotice" [userType]="userType"></notice-entry>
+          </div>
+        </div>
+      </mat-card>
+    </mat-tab>
+  </div>
+  <div *ngIf="userType == 'trainer'">
+    <mat-tab label="Sessions">
+      <mat-card class="half-width">
+        <mat-card-title>Your Sessions</mat-card-title>
+        <div *ngIf="!hasSessions">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="hasSessions">
+          <page-section [trainerSessions]="trainerSessions" [hasSessions]="hasSessions" [userType]="userType" [userId]="userId" (reloadTrainerSessions)="getTrainerSessions()"></page-section>
+        </div>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Schedule a session</mat-card-title>
+        <mat-card-content>
+          <button mat-raised-button color="primary" (click)="scheduleSessionModal($event)"><i class="fas fa-plus"></i> New</button>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Classes">
+      <mat-card class="half-width">
+        <mat-card-title>All Current Classes</mat-card-title>
+        <class-overview-section (openBookingModal)="scheduleSessionModal($event)"></class-overview-section>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Suggest New Class</mat-card-title>
+        <mat-card-content>
+          <button mat-raised-button color="primary" (click)="suggestNewClassModal($event)"><i class="far fa-lightbulb"></i> Suggest</button>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Awaiting Approval</mat-card-title>
+        <div *ngIf="!gotClassAwaiting">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="gotClassAwaiting">
+          <div *ngIf="classesAwaitingApproval == undefined">
+            <p class="warning">There was a problem connecting to the server - please check your internet connection and try again.</p>
+          </div>
+          <div *ngIf="classesAwaitingApproval != undefined">
+            <div *ngIf="classesAwaitingApproval.length > 0">
+              <div *ngFor="let aClass of classesAwaitingApproval">
+                <class [class]="aClass" [userType]="userType"></class>
+              </div>
+            </div>
+            <div *ngIf="classesAwaitingApproval.length == 0">
+              <p class="warning">There are currently no classes awaiting approval.</p>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Users">
+      <mat-card class="full-width">
+        <mat-card-title>Create New User</mat-card-title>
+        <form class="new-user-form">
+          <mat-form-field>
+            <input matInput #userFirstName placeholder="First Name">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput #userSurname placeholder="Surname">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput #userEmail placeholder="Email">
+          </mat-form-field>
+          <span class="button-container">
+            <button mat-raised-button color="primary" (click)="createNewAccount('user', userFirstName.value,
+            userSurname.value, userEmail.value)"><i class="fas fa-plus"></i> Create
+            </button>
+          </span>
+        </form>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Notice Board">
+      <mat-card class="half-width">
+        <mat-card-title>Live Notices</mat-card-title>
+        <div *ngFor="let aNotice of notices">
+          <notice-entry [noticeEntry]="aNotice" [userType]="userType"></notice-entry>
+        </div>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>New Post</mat-card-title>
+        <button mat-raised-button color="primary" (click)="newNoticeModal($event)"><i class="fas fa-plus"></i> New</button>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Awaiting Approval</mat-card-title>
+        <div *ngIf="!gotNoticeAwaiting">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="gotNoticeAwaiting">
+          <div *ngIf="noticesAwaiting != undefined">
+            <div *ngIf="noticesAwaiting.length > 0">
+              <div *ngFor="let aNotice of noticesAwaiting">
+                <notice-entry [noticeEntry]="aNotice" [userType]="userType"></notice-entry>
+              </div>
+            </div>
+            <div *ngIf="noticesAwaiting.length == 0">
+              <p class="warning">There are currently no notices awaiting approval.</p>
+            </div>
+          </div>
+          <div *ngIf="noticesAwaiting == undefined">
+            <p class="warning">There was a problem connecting to the server - please check your internet connection and try again.</p>
+          </div>
+        </div>
+      </mat-card>
+    </mat-tab>
+  </div>
+  <div *ngIf="userType == 'admin'">
+    <mat-tab label="Sessions & Bookings">
+      <mat-card class="half-width">
+        <mat-card-title>Sessions</mat-card-title>
+        <div *ngIf="!hasSessions">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="hasSessions">
+          <page-section [trainerSessions]="allSessions" [hasSessions]="hasSessions" [userType]="userType" [userId]="userId" (reloadTrainerSessions)="getAllPossibleSessions()"></page-section>
+        </div>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Top 3 Classes</mat-card-title>
+        <p>These are the top 3 classes users are booking onto.</p>
+        <div *ngIf="hasTopThree">
+          <div *ngIf="topThreeClasses != undefined">
+            <div *ngIf="topThreeClasses.length > 0">
+              <div *ngFor="let aClass of topThreeClasses">
+                <mat-card class="top-three">
+                  {{aClass.className}}
+                </mat-card>
+              </div>
+            </div>
+            <div *ngIf="topThreeClasses.length == 0">
+              <p class="warning">Unable to return top three classes from the server - please check your internet connection and try again.</p>
+            </div>
+          </div>
+          <div *ngIf="topThreeClasses == undefined">
+            <p class="warning">There is a problem connecting to the server - please check your internet connection and try again.</p>
+          </div>
+        </div>
+        <div *ngIf="!hasTopThree">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Schedule a session</mat-card-title>
+        <mat-card-content>
+          <button mat-raised-button color="primary" (click)="scheduleSessionModal($event)"><i class="fas fa-plus"></i> New</button>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Classes">
+      <mat-card class="half-width">
+        <mat-card-title>All Current Classes</mat-card-title>
+        <class-overview-section (openBookingModal)="scheduleSessionModal($event)" (deleteClass)="deleteClass($event)"></class-overview-section>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Add New Class</mat-card-title>
+        <mat-card-content>
+          <button mat-raised-button color="primary" (click)="suggestNewClassModal($event)"><i class="fas fa-plus"></i> New</button>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Awaiting Approval</mat-card-title>
+        <div *ngIf="classesAwaitingApproval != undefined">
+          <div *ngIf="classesAwaitingApproval.length > 0">
+            <div *ngFor="let aClass of classesAwaitingApproval">
+              <class [class]="aClass" [userType]="userType" (deleteClass)="deleteClass($event)" (approveClass)="approveClass($event)"></class>
+            </div>
+          </div>
+          <div *ngIf="classesAwaitingApproval.length == 0">
+            <p class="warning">There are currently no classes awaiting approval.</p>
+          </div>
+        </div>
+        <div *ngIf="classesAwaitingApproval == undefined">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Accounts">
+      <mat-tab-group class="inner-tabs">
+        <mat-tab label="Users" aria-selected="true">
+          <mat-card class="half-width">
+            <mat-card-title>Create New User</mat-card-title>
+            <form class="new-user-form">
+              <mat-form-field>
+                <input matInput #userFirstName placeholder="First Name">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #userSurname placeholder="Surname">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #userEmail placeholder="Email">
+              </mat-form-field>
+              <span class="button-container">
+            <button mat-raised-button color="primary" (click)="createNewAccount('user', userFirstName.value,
+            userSurname.value, userEmail.value)"><i class="fas fa-plus"></i> Create
+            </button>
+          </span>
+            </form>
+          </mat-card>
+          <mat-card class="half-width">
+            <mat-card-title>Existing Users</mat-card-title>
+            <div *ngIf="users == undefined">
+              <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+            </div>
+            <div *ngIf="users != undefined">
+              <div *ngIf="users.length == 0">
+                <p class="warning">There is currently no user data being returned from the server - please check your internet connection and try again.</p>
+              </div>
+              <div *ngIf="users.length > 0">
+                <mat-accordion>
+                  <div *ngFor="let aUser of users">
+                    <user-details [userInfo]="aUser" [userType]="'user'" [loggedInUserId]="userId" [loggedInUserType]="userType" (deleteUser)="deleteUser($event)"></user-details>
+                  </div>
+                </mat-accordion>
+              </div>
+            </div>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Trainers">
+          <mat-card class="half-width">
+            <mat-card-title>Create New Trainer</mat-card-title>
+            <form class="new-user-form">
+              <mat-form-field>
+                <input matInput #trainerFirstName placeholder="First Name">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #trainerSurname placeholder="Surname">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #trainerEmail placeholder="Email">
+              </mat-form-field>
+              <span class="button-container">
+            <button mat-raised-button color="primary" (click)="createNewAccount('trainer', trainerFirstName.value,
+            trainerSurname.value, trainerEmail.value)"><i class="fas fa-plus"></i> Create
+            </button>
+          </span>
+            </form>
+          </mat-card>
+          <mat-card class="half-width">
+            <mat-card-title>Existing Trainers</mat-card-title>
+            <div *ngIf="trainers == undefined">
+              <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+            </div>
+            <div *ngIf="trainers != undefined">
+              <div *ngIf="trainers.length == 0">
+                <p class="warning">There is currently no trainer data being returned from the server - please check your internet connection and try again.</p>
+              </div>
+              <div *ngIf="trainers.length > 0">
+                <mat-accordion>
+                  <div *ngFor="let aTrainer of trainers">
+                    <user-details [userInfo]="aTrainer" [userType]="'trainer'" [loggedInUserId]="userId" [loggedInUserType]="userType" (deleteUser)="deleteTrainer($event)"></user-details>
+                  </div>
+                </mat-accordion>
+              </div>
+            </div>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Administrators">
+          <mat-card class="half-width">
+            <mat-card-title>Create New Admin</mat-card-title>
+            <form class="new-user-form">
+              <mat-form-field>
+                <input matInput #adminFirstName placeholder="First Name">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #adminSurname placeholder="Surname">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #adminEmail placeholder="Email">
+              </mat-form-field>
+              <span class="button-container">
+            <button mat-raised-button color="primary" (click)="createNewAccount('admin', adminFirstName.value,
+            adminSurname.value, adminEmail.value)"><i class="fas fa-plus"></i> Create
+            </button>
+          </span>
+            </form>
+          </mat-card>
+          <mat-card class="half-width">
+            <mat-card-title>Existing Admins</mat-card-title>
+            <div *ngIf="admins == undefined">
+              <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+            </div>
+            <div *ngIf="admins != undefined">
+              <div *ngIf="admins.length == 0">
+                <p class="warning">There is currently no admin data being returned from the server - please check your internet connection and try again.</p>
+              </div>
+              <div *ngIf="admins.length > 0">
+                <mat-accordion>
+                  <div *ngFor="let aAdmin of admins">
+                    <user-details [userInfo]="aAdmin" [userType]="'admin'" [loggedInUserId]="userId" [loggedInUserType]="userType" (deleteUser)="deleteAdmin($event)"></user-details>
+                  </div>
+                </mat-accordion>
+              </div>
+            </div>
+          </mat-card>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-tab>
+    <mat-tab label="Notice Board">
+      <mat-card class="half-width">
+        <mat-card-title>Live Notices</mat-card-title>
+        <div *ngIf="notices == undefined">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="notices != undefined">
+          <div *ngIf="notices.length == 0">
+            <p class="warning">There are currently no notices to display.</p>
+          </div>
+          <div *ngIf="notices.length > 0">
+            <div *ngFor="let aNotice of notices">
+              <notice-entry [noticeEntry]="aNotice" [userType]="userType" (deleteNotice)="deleteNotice($event)"></notice-entry>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>New Post</mat-card-title>
+        <button mat-raised-button color="primary" (click)="newNoticeModal($event)"><i class="fas fa-plus"></i> New</button>
+      </mat-card>
+      <mat-card class="half-width">
+        <mat-card-title>Awaiting Approval</mat-card-title>
+        <div *ngIf="noticesAwaiting == undefined">
+          <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="noticesAwaiting != undefined">
+          <div *ngIf="noticesAwaiting.length == 0">
+            <p class="warning">There are currently no notices awaiting approval.</p>
+          </div>
+          <div *ngIf="noticesAwaiting.length > 0">
+            <div *ngFor="let aNotice of noticesAwaiting">
+              <notice-entry [noticeEntry]="aNotice" [userType]="userType" (deleteNotice)="deleteNotice($event)" (approveNotice)="approveNotice($event)"></notice-entry>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </mat-tab>
+  </div>
+</mat-tab-group>

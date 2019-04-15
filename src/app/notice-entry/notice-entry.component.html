@@ -1,0 +1,26 @@
+<ng-container *ngIf="noticeEntry; else second">
+  <mat-card class="full-width notice" [class.notApproved]="noticeEntry.approved == 0">
+    <p>{{noticeEntry.message}}</p>
+    <p class="sub-copy">Posted {{noticeEntry.dateTime}}</p>
+    <div *ngIf="noticeEntry.approved == 0 && userType == 'admin'">
+      <span class="button-container">
+        <button mat-button class="cancel" (click)="deleteThisNotice()"><i class="fas fa-trash-alt"></i> Delete</button>
+      </span>
+      <span class="button-container">
+        <button mat-button class="approve" (click)="approveThisNotice()"><i class="fas fa-check"></i> Approve</button>
+      </span>
+    </div>
+    <div *ngIf="noticeEntry.approved == 1 && userType == 'admin'">
+      <span>
+        <button mat-button class="cancel" (click)="deleteThisNotice()"><i class="fas fa-trash-alt"></i> Delete</button>
+      </span>
+    </div>
+  </mat-card>
+</ng-container>
+<ng-template #second>
+  <mat-card class="full-width">
+    <p class="warning">There are currently no notices to display.</p>
+  </mat-card>
+</ng-template>
+
+

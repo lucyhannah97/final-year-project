@@ -1,0 +1,18 @@
+/* Width for form fields */
+.mat-form-field {width: 70%; margin: auto;}
+
+/* Heading Styles */
+h1.success {color: var(--submit);}
+
+/* Paragraph Styles */
+p.left.full {width: 100%; text-align: left;}
+p.hide {display: none;}
+
+/* Radio Button Styles */
+#frequency .mat-radio-button {width: 33%; float: left;}
+
+/* Button container */
+.dialog-buttons-container {width: 80%; margin: auto;}
+.dialog-buttons-container>span {width: 50%; float: left; position: relative;}
+.dialog-buttons-container>span>button {font-weight: normal;}
+.dialog-buttons-container>button.cancel {margin: auto;}

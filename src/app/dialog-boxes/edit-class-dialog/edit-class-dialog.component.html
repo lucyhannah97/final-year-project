@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Edit Class Information</h1>
+<mat-form-field>
+  <input matInput #name placeholder="Class Name" value="{{data.name}}">
+</mat-form-field>
+<mat-form-field>
+  <textarea matInput #desc placeholder="Description">{{data.description}}</textarea>
+</mat-form-field>
+<mat-form-field>
+  <input matInput #focus placeholder="Focus" value="{{data.focus}}">
+</mat-form-field>
+<mat-form-field>
+  <input matInput #diff placeholder="Difficulty" value="{{data.difficulty}}">
+</mat-form-field>
+<div mat-dialog-actions class="dialog-buttons-container">
+  <span>
+    <button mat-button class="cancel" (click)="onNoClick()">Cancel</button>
+  </span>
+  <span>
+    <button mat-raised-button color="primary" (click)="saveChanges(data.id, name.value, desc.value, focus.value, diff.value)"><i class="fas fa-check"></i> Save</button>
+  </span>
+</div>

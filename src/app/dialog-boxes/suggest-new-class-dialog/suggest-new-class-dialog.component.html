@@ -1,0 +1,37 @@
+<mat-card-title>Suggest New Class</mat-card-title>
+<mat-card-content>
+  <form>
+    <mat-form-field>
+      <input matInput #classTitle placeholder="Class Title">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput #desc placeholder="Description">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Focus" [(value)]="focusSelected">
+        <mat-option value="Cardio">Cardio</mat-option>
+        <mat-option value="Stretch">Stretch</mat-option>
+        <mat-option value="Strength">Strength</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Difficulty" [(value)]="difficultySelected">
+        <mat-option value="Beginner">Beginner</mat-option>
+        <mat-option value="Intermediate">Intermediate</mat-option>
+        <mat-option value="Advanced">Advanced</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+  <p id="error-message" class="warning hide">Please enter a value for all fields.</p>
+</mat-card-content>
+<div mat-dialog-actions class="dialog-buttons-container">
+  <span>
+    <button mat-button class="cancel" (click)="onNoClick()">Close</button>
+  </span>
+  <span>
+    <button mat-raised-button color="primary" (click)="suggestClass(classTitle.value,
+    desc.value, focusSelected, difficultySelected)">
+      <i class="far fa-lightbulb"></i> Suggest
+    </button>
+  </span>
+</div>

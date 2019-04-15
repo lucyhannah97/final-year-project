@@ -1,0 +1,81 @@
+<mat-card-content>
+  <div *ngIf="userType == 'user'">
+    <mat-accordion>
+      <div class="bookings-container">
+        <div *ngIf="hasSessions">
+          <div *ngIf="userSessions.length == 0 && userWaiting.length == 0">
+            <p class="warning">You don't currently have any bookings.</p>
+          </div>
+          <div *ngIf="userSessions.length > 0 || userWaiting.length > 0">
+            <div *ngFor="let aBooking of userSessions">
+              <class-booking [classBooking]="aBooking" (deleteBooking)="deleteBooking($event)" [waiting]="false" [userType]="userType"></class-booking>
+            </div>
+            <div *ngFor="let aWaiting of userWaiting">
+              <class-booking [classBooking]="aWaiting" (deleteBooking)="deleteBooking($event)" [waiting]="true" [userType]="userType"></class-booking>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!hasSessions">
+          <div *ngIf="userSessions == undefined || userWaiting == undefined">
+            <p class="warning">There was a problem connecting to the server - please check your internet connection and try again.</p>
+          </div>
+          <div *ngIf="userSessions != undefined && userWaiting != undefined">
+            <p class="warning">You don't currently have any bookings.</p>
+          </div>
+        </div>
+      </div>
+    </mat-accordion>
+  </div>
+  <div *ngIf="userType == 'trainer' || userType == 'admin'">
+    <!--<div *ngIf="userType == 'admin'">-->
+      <!--&lt;!&ndash; Filter by-->
+       <!--Class Name-->
+       <!--Class Focus-->
+       <!--Class Difficulty-->
+       <!--Date-->
+       <!--&ndash;&gt;-->
+      <!--<div *ngIf="gotTrainers">-->
+        <!--<form id="filter-form">-->
+          <!--<mat-form-field class="spacing">-->
+            <!--<mat-select placeholder="Trainer" id="trainerFilter" [(value)]="trainerSelected">-->
+              <!--<mat-option *ngFor="let aTrainer of trainersList" [value]="aTrainer.valueOf()">-->
+                <!--{{aTrainer}}-->
+              <!--</mat-option>-->
+            <!--</mat-select>-->
+          <!--</mat-form-field>-->
+          <!--<mat-form-field class="spacing">-->
+            <!--<mat-select placeholder="Room" id="roomFilter" [(value)]="roomSelected">-->
+              <!--<mat-option *ngFor="let aRoom of roomList" [value]="aRoom.valueOf()">-->
+                <!--{{aRoom}}-->
+              <!--</mat-option>-->
+            <!--</mat-select>-->
+          <!--</mat-form-field>-->
+          <!--<button mat-raised-button color="primary" class="spacing" (click)="filterResults()">Filter</button>-->
+        <!--</form>-->
+      <!--</div>-->
+      <!--<div *ngIf="!gotTrainers">-->
+        <!--<mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>-->
+      <!--</div>-->
+    <!--</div>-->
+    <mat-accordion>
+      <div class="bookings-container">
+        <div *ngIf="hasSessions">
+          <!--<div *ngIf="tr.length > 0">-->
+            <div *ngFor="let aSession of trainerSessions">
+              <trainer-session [trainerSession]="aSession" (deleteSession)="deleteSession($event)" [userType]="userType"></trainer-session>
+            </div>
+          <!--</div>-->
+          <!--<div *ngIf="filteredResults.length == 0">-->
+            <!--<p class="warning">There are no sessions matching the criteria selected.</p>-->
+          <!--</div>-->
+        </div>
+        <div *ngIf="!hasSessions && userType != 'admin'">
+          <p class="warning">You don't currently have any sessions.</p>
+        </div>
+        <div *ngIf="!hasSessions && userType == 'admin'">
+          <p class="warning">There are currently no sessions scheduled.</p>
+        </div>
+      </div>
+    </mat-accordion>
+  </div>
+</mat-card-content>

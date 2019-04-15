@@ -1,0 +1,11 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    {{userInfo.id}}: {{userInfo.firstName}} {{userInfo.surname}}
+  </mat-expansion-panel-header>
+  <span>
+    {{userInfo.email}}
+  </span>
+  <span *ngIf="!(userType == loggedInUserType && userInfo.id == loggedInUserId)">
+    <button mat-button class="cancel" (click)="deleteThisUser()"><i class="fas fa-trash-alt"></i> Delete</button>
+  </span>
+</mat-expansion-panel>

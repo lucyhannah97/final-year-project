@@ -1,0 +1,6 @@
+.form-container {width: 70%; margin: 16px auto; border: none; box-shadow: none;}
+.mat-form-field {width: 70%; margin: auto;}
+.button-container {width: 70%; margin: 16px auto auto auto; text-align: center; display: inline-block;}
+h2 {margin-top: 16px;}
+
+#loading-spinner {z-index: 3; position: absolute; left: calc(50% - 50px); top: 400px;}

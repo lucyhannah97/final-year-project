@@ -1,0 +1,51 @@
+<mat-expansion-panel class="left"
+                     [class.editable]="class.approved == 1 && (userType == 'trainer' || userType =='admin')"
+                     [class.notApproved]="class.approved == 0">
+  <mat-expansion-panel-header>
+    {{class.className}}
+  </mat-expansion-panel-header>
+  <p class="description">
+    {{class.classDesc}}
+  </p>
+  <div *ngIf="class.approved == 1 && (userType == 'trainer' || userType == 'admin')">
+    <span class="edit-icon" (click)="editDescriptionDialog()">
+      <i class="fas fa-edit"></i>
+    </span>
+  </div>
+  <mat-form-field id="edit-description">
+    <textarea matInput disabled placeholder="Enter new description"></textarea>
+  </mat-form-field>
+  <p class="full">
+    <span><i class="fas fa-bullseye"></i></span> {{class.focus}}
+  </p>
+  <p class="full">
+    <span><i class="fas fa-tachometer-alt"></i></span> {{class.difficulty}}
+  </p>
+  <div *ngIf="userType == 'user'">
+    <div *ngIf="sessions != undefined">
+      <div *ngIf="sessions.length != 0">
+        <button mat-raised-button color="primary" (click)="sendData(class.classId)">Book this class</button>
+      </div>
+      <div *ngIf="sessions.length == 0">
+        <p class="full warning">Sorry, there are no available bookings for this class at the moment, that you are not already booked onto.</p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="class.approved == 1 && userType != 'user'">
+    <span *ngIf="userType == 'admin'" class="button-container">
+      <button mat-button class="cancel" (click)="deleteClassRequest(class.classId)"><i class="fas fa-trash-alt"></i> Delete</button>
+    </span>
+    <span class="button-container">
+      <button mat-raised-button color="primary" (click)="sendData(class.classId)">Schedule a session</button>
+    </span>
+  </div>
+  <div *ngIf="class.approved == 0 && userType == 'admin'">
+    <span class="button-container">
+        <button mat-button class="cancel" (click)="deleteClassRequest(class.classId)"><i class="fas fa-trash-alt"></i> Delete</button>
+      </span>
+    <span class="button-container">
+        <button mat-button class="approve" (click)="approveClassRequest(class.classId)"><i class="fas fa-check"></i> Approve</button>
+      </span>
+  </div>
+</mat-expansion-panel>
+

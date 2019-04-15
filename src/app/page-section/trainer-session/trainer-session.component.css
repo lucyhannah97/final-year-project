@@ -1,0 +1,14 @@
+/* Delete Button */
+span.delete-button {display: block; line-height: 16px; height: 16px; position: absolute;
+  right: 8px; width: 14px; padding: 16px; transition: 0.1s; border-radius: 50%;}
+span.delete-button:hover {background-color: #EEEEEE;}
+/* Delete Button Icon */
+span.delete-button .fas {position: relative; top: -8px; left: -7px;}
+
+.mat-expansion-panel {text-align: left;}
+
+
+p>span.icon {min-width: 26px; text-align: center; display: inline-block; padding: 0 4px;}
+p>span.icon>i {margin: auto;}
+
+i {font-size: 20px;}

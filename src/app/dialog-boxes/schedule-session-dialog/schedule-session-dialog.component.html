@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>Schedule a Session</h1>
+<div mat-dialog-content>
+  <div *ngIf="data.classes == undefined">
+    <p class="warning">Oops! There was a problem connecting to the server.<br />
+      Please check your internet connection and try again.</p>
+    <div mat-dialog-actions class="dialog-buttons-container">
+      <button mat-button class="cancel" (click)="onNoClick()">Close</button>
+    </div>
+  </div>
+  <div *ngIf="data.classes != undefined">
+    <mat-form-field>
+      <mat-select placeholder="Class" (selectionChange)="returnRoom()" [(value)]="classSelected">
+        <mat-option *ngFor="let aClass of this.data.classes" [value]="aClass.id">
+          {{aClass.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Room" (selectionChange)="returnTimesAvailable()" [(value)]="roomSelected">
+          <mat-option *ngFor="let aRoom of this.rooms" [value]="aRoom">
+            {{aRoom.name}}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="dateInput" [matDatepicker]="datePicker" placeholder="Date" [value]="dateSelected" (dateChange)="removeOccupiedSlots()">
+      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field *ngIf="!noTimesAvailable">
+      <mat-select placeholder="Time" [(value)]="timeSelected" (selectionChange)="getTrainers()">
+        <mat-option *ngFor="let aTime of possibleTimes" [value]="aTime">
+          {{aTime}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="noTimesAvailable">
+      <p class="warning">No times available on this date - please select an alternative date</p>
+    </div>
+    <div *ngIf="maxCapacity != ''" id="max-capacity">
+      <p>Max Capacity: {{maxCapacity}}</p>
+    </div>
+      <mat-radio-group aria-label="Frequency" id="frequency" [(ngModel)]="frequencySelected">
+        <mat-radio-button color="primary" value="1" aria-selected="true">One-off</mat-radio-button>
+        <mat-radio-button color="primary" value="2">Weekly</mat-radio-button>
+        <mat-radio-button color="primary" value="3">Fortnightly</mat-radio-button>
+      </mat-radio-group>
+      <p *ngIf="frequencySelected == 2 || frequencySelected == 3" class="warning">4 weekly / fortnightly occurrences of classes are scheduled if one of these options are selected.</p>
+    <div *ngIf="userType == 'admin'">
+      <mat-form-field *ngIf="trainers != undefined && trainers.length > 0">
+        <mat-select placeholder="Trainer" [(value)]="trainerSelected">
+          <div *ngFor="let aTrainer of trainers">
+            <mat-option [value]="aTrainer.id">
+              {{aTrainer.name}}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="trainers != undefined && trainers.length == 0">
+        <p class="warning">Sorry there are no trainers available at this time - please select an alternative time.</p>
+      </div>
+    </div>
+    <div mat-dialog-actions class="dialog-buttons-container">
+      <span>
+        <button mat-button class="cancel" (click)="onNoClick()">Cancel</button>
+      </span>
+        <span>
+        <button mat-raised-button color="primary" (click)="scheduleClass()">Book</button>
+      </span>
+    </div>
+  </div>
+</div>

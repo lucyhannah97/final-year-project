@@ -1,0 +1,6 @@
+/* Bookings Container */
+.bookings-container { min-height: 67px; }
+/* Spacing for filter drop-downs */
+.spacing {margin: 0 32px;}
+/* Spacing for bottom of filters section */
+#filter-form {margin-bottom: 16px;}

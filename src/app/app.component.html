@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+  Liverpool Health
+  <button mat-button id="menu-icon" [matMenuTriggerFor]="menu">
+    <i class="fas fa-ellipsis-v"></i>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="logout()">
+      <span><i class="fas fa-sign-out-alt"></i> Log Out</span>
+    </button>
+    <!--<button mat-menu-item (click)="changePassword()">-->
+      <!--<span><i class="fas fa-user-alt"></i> Change Password</span>-->
+    <!--</button>-->
+
+  </mat-menu>
+</mat-toolbar>
+
+<div id="main">
+  <router-outlet></router-outlet>
+</div>
+

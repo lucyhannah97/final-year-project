@@ -1,0 +1,21 @@
+/* Full width */
+.full {width: 100%; position: relative; float: left;}
+
+/* Align contents to the left */
+.left {text-align: left;}
+.left.editable p.description {width: 95%; position: relative; float: left;}
+.left.editable span.edit-icon {width: 5%; position: relative; float: left; text-align: center; border-radius: 4px;}
+.left.editable span.edit-icon:hover {background-color: #EEEEEE;}
+.left.editable span.edit-icon>i {width: 16px; height: 16px;}
+
+/* If class not yet approved */
+.notApproved {color: var(--cancel);}
+
+/* Hide edit icon by default - only display for certain user types */
+.mat-form-field#edit-description {display: none;}
+
+/* Container for buttons */
+span.button-container {width: 50%; float: left; position: relative; display: inline-block; text-align: center;}
+span.button-container>button.approve {color: var(--submit);}
+span.button-container>button.cancel {color: var(--black);}
+
